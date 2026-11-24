@@ -509,6 +509,9 @@ footer{display:block;width:fit-content;max-width:100%;margin:12px auto 0;padding
 body.frwatch #board{pointer-events:none}
 .frtoast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);max-width:min(92vw,460px);padding:11px 16px;border-radius:12px;background:#2a1457;color:#fff;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 28px rgba(0,0,0,.45);font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:99999;text-align:center}
 .frtoast.on{opacity:1;transform:translate(-50%,0)}
+#frGateX{position:fixed;z-index:75;top:max(10px,env(safe-area-inset-top,0px));right:max(10px,env(safe-area-inset-right,0px))}
+#frBar .xs{padding:5px 9px;font-size:11px;opacity:.85}
+.frx{font-size:12px;padding:7px 12px;opacity:.9}.frx.arm{background:#b3261e;color:#fff;border-color:#b3261e;opacity:1}
 #frBar .tk{margin-left:auto;padding:6px 10px;font-size:12px}
 #frBar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 10px;padding:8px 12px;border-radius:14px;background:linear-gradient(90deg,rgba(255,210,63,.2),rgba(255,45,149,.16));border:1px solid rgba(255,210,63,.5)}
 #frBar .frav{width:32px;height:32px;font-size:15px}
@@ -641,7 +644,7 @@ body.playing #frBar .s{font-size:12px}
 </div>
 
 
-<div id="frGate" hidden></div>
+<div id="frGate" hidden></div><div id="frGateX" hidden></div>
 <div id="frEnd" hidden></div>
 
 <div id="win" hidden>
@@ -1403,7 +1406,7 @@ en:{frMode:'👥 Play with Friends',frModeD:'Take turns casting Eurovision votes
  yourName:'Your name',namePh:'e.g. Mehmet',createBtn:'Create room',joinBtn:'Join',codeLbl:'Invite code',back:'← Back',
  lobby:'Game Lobby',roomCode:'Room code',players:'Players',host:'Host',you:'You',ready:'Ready',notReady:'Not ready',waiting:'Waiting for a friend…',
  iReady:'✔ I’m ready',iNotReady:'Not ready',invites:'Invite codes (each works only once)',copy:'Copy',copied:'Copied!',copyAll:'📋 Copy all invitations',avail:'Available',usedBy:n=>'Used by '+n,
- start:'Start game →',startNeed:'At least 2 players must be in the room and everyone must be ready.',hostOnly:'Only the Host can start the game.',
+ start:'Start game →',startNeed:'At least 2 players must be in the room and everyone must be ready.',hostOnly:'Only the Host can start the game.',endSes:'End session',leaveSes:'Leave session',sure:'Tap again to confirm',closedMsg:'The Host ended the session.',eClosed:'This session was ended by the Host.',seats:'You can play with 2 to 4 players — you don’t need to fill every seat. Start as soon as everyone who joined is ready.',
  eCodeEmpty:'Enter an invite code.',eFormat:'That code doesn’t look right — invite codes have 8 letters/digits.',eNone:'Invalid code — no room was found for it.',eUsed:'This invite code has already been used.',eStarted:'This game has already started.',eName:'Enter a name (1–20 characters).',eTaken:'That name is already taken in this room.',eFew:'You need at least 2 players, all ready.',
  inviteMsg:c=>'Join my EuroVote game! Invite code: '+c,
  turnOf:n=>n+'’s turn',jury:c=>'Jury: '+c,ballot:(a,b)=>'Ballot '+a+'/'+b,pubTurn:'Public vote',doneTurn:'Voting completed',
@@ -1424,7 +1427,7 @@ fr:{frMode:'👥 Jouer entre amis',frModeD:'Votez à tour de rôle avec jusqu’
  yourName:'Votre nom',namePh:'ex. Mehmet',createBtn:'Créer le salon',joinBtn:'Rejoindre',codeLbl:'Code d’invitation',back:'← Retour',
  lobby:'Salon de jeu',roomCode:'Code du salon',players:'Joueurs',host:'Hôte',you:'Vous',ready:'Prêt',notReady:'Pas prêt',waiting:'En attente d’un ami…',
  iReady:'✔ Je suis prêt',iNotReady:'Pas prêt',invites:'Codes d’invitation (usage unique)',copy:'Copier',copied:'Copié !',copyAll:'📋 Copier toutes les invitations',avail:'Disponible',usedBy:n=>'Utilisé par '+n,
- start:'Lancer la partie →',startNeed:'Il faut au moins 2 joueurs dans le salon et tous doivent être prêts.',hostOnly:'Seul l’hôte peut lancer la partie.',
+ start:'Lancer la partie →',startNeed:'Il faut au moins 2 joueurs dans le salon et tous doivent être prêts.',hostOnly:'Seul l’hôte peut lancer la partie.',endSes:'Terminer la session',leaveSes:'Quitter la session',sure:'Touchez à nouveau pour confirmer',closedMsg:'L’hôte a mis fin à la session.',eClosed:'Cette session a été terminée par l’hôte.',seats:'Vous pouvez jouer de 2 à 4 joueurs — inutile de remplir toutes les places. Lancez dès que tous ceux qui ont rejoint sont prêts.',
  eCodeEmpty:'Saisissez un code d’invitation.',eFormat:'Ce code n’est pas valide — un code d’invitation compte 8 lettres/chiffres.',eNone:'Code invalide — aucun salon trouvé.',eUsed:'Ce code d’invitation a déjà été utilisé.',eStarted:'Cette partie a déjà commencé.',eName:'Saisissez un nom (1 à 20 caractères).',eTaken:'Ce nom est déjà pris dans ce salon.',eFew:'Il faut au moins 2 joueurs, tous prêts.',
  inviteMsg:c=>'Rejoins ma partie EuroVote ! Code d’invitation : '+c,
  turnOf:n=>'Au tour de '+n,jury:c=>'Jury : '+c,ballot:(a,b)=>'Vote '+a+'/'+b,pubTurn:'Vote du public',doneTurn:'Vote terminé',
@@ -1445,7 +1448,7 @@ tr:{frMode:'👥 Arkadaşlarla Oyna',frModeD:'En fazla 3 arkadaşınla sırayla 
  yourName:'Adın',namePh:'örn. Mehmet',createBtn:'Odayı oluştur',joinBtn:'Katıl',codeLbl:'Davet kodu',back:'← Geri',
  lobby:'Oyun Lobisi',roomCode:'Oda kodu',players:'Oyuncular',host:'Host',you:'Sen',ready:'Hazır',notReady:'Hazır değil',waiting:'Bir arkadaş bekleniyor…',
  iReady:'✔ Hazırım',iNotReady:'Hazır değilim',invites:'Davet kodları (her biri yalnızca bir kez kullanılır)',copy:'Kopyala',copied:'Kopyalandı!',copyAll:'📋 Tüm davetleri kopyala',avail:'Kullanılabilir',usedBy:n=>'Kullanan: '+n,
- start:'Oyunu başlat →',startNeed:'Odada en az 2 oyuncu olmalı ve herkes hazır olmalı.',hostOnly:'Oyunu yalnızca Host başlatabilir.',
+ start:'Oyunu başlat →',startNeed:'Odada en az 2 oyuncu olmalı ve herkes hazır olmalı.',hostOnly:'Oyunu yalnızca Host başlatabilir.',endSes:'Oturumu bitir',leaveSes:'Oturumdan ayrıl',sure:'Onaylamak için tekrar dokun',closedMsg:'Host oturumu sonlandırdı.',eClosed:'Bu oturum Host tarafından sonlandırıldı.',seats:'2 ila 4 kişiyle oynayabilirsin — tüm koltukların dolması gerekmez. Katılan herkes hazır olunca başlat.',
  eCodeEmpty:'Bir davet kodu gir.',eFormat:'Bu kod geçerli görünmüyor — davet kodları 8 harf/rakamdan oluşur.',eNone:'Geçersiz kod — bu koda ait oda bulunamadı.',eUsed:'Bu davet kodu daha önce kullanılmış.',eStarted:'Bu oyun zaten başladı.',eName:'Bir ad gir (1–20 karakter).',eTaken:'Bu ad odada zaten kullanılıyor.',eFew:'En az 2 oyuncu olmalı ve hepsi hazır olmalı.',
  inviteMsg:c=>'EuroVote oyunuma katıl! Davet kodu: '+c,
  turnOf:n=>'Sıra: '+n,jury:c=>'Jüri: '+c,ballot:(a,b)=>'Oylama '+a+'/'+b,pubTurn:'Seyirci oylaması',doneTurn:'Oylama tamamlandı',
@@ -1490,7 +1493,7 @@ const LocalBackend=(()=>{
       save(d);notify();return{room:clone(d.rooms[code]),playerId:pid};
     },
     async getRoom(code){return clone(load().rooms[code]||null)},
-    async listRooms(){return Object.values(load().rooms).sort((a,b)=>b.createdAt-a.createdAt).map(clone)},
+    async listRooms(){return Object.values(load().rooms).filter(r=>r.status!=='closed').sort((a,b)=>b.createdAt-a.createdAt).map(clone)},
     async joinWithInvite(raw,name){
       const c=norm(raw);if(!c)throw err('empty');if(c.length!==8)throw err('format');
       const nm=String(name||'').trim().slice(0,20);if(!nm)throw err('name');
@@ -1527,6 +1530,7 @@ const LocalBackend=(()=>{
     /* realtime seam: cb(room) fires now and on every change. Firebase: onSnapshot(doc(db,'rooms',code),s=>cb(s.data())) */
     subscribeRoom(code,cb){const f=()=>cb(clone(load().rooms[code]||null));subs.add(f);f();return()=>subs.delete(f)},
     async finishGame(code,final){return mutate(code,r=>{r.status='done';if(r.game)r.game.final=final})},
+    async closeRoom(code){return mutate(code,r=>{r.status='closed'})},
     async reopenLobby(code){return mutate(code,r=>{r.status='lobby';r.game=null;r.players.forEach(p=>{if(!p.isHost)p.ready=false})})}
   };
 })();
@@ -1656,7 +1660,9 @@ const FRG={
   onRoomChange(){
     if(!this.roomCode)return;
     const r=FriendsBackend.peek(this.roomCode);if(r===undefined)return;
-    this.room=r;if(!this.online)return;
+    this.room=r;
+    if(r&&r.status==='closed'&&!this.leaving){this.leaving=true;frToast(ft().closedMsg);this.leaveSession().finally(()=>{this.leaving=false});return}
+    if(!this.online)return;
     if(this.active){
       if(!r&&!this.starting){this.toLobbyView(true);return}
       if(r&&r.status==='lobby'&&!this.starting){this.dropToLobby();return}
@@ -1665,6 +1671,12 @@ const FRG={
     if(r&&r.status==='playing'&&r.game&&!this.picking&&!this.joining&&!this.starting&&r.players.some(p=>p.id===this.playerId)){
       this.joining=true;this.resume().catch(e=>console.warn(e)).finally(()=>{this.joining=false});
     }
+  },
+  async leaveSession(){const was=this.roomCode,me=this.playerId;this.setSess(null);this.room=null;this.toLobbyView(true)},
+  async endSession(){
+    if(this.leaving)return;this.leaving=true;
+    try{if(this.isHost&&this.roomCode)await FriendsBackend.closeRoom(this.roomCode)}catch(x){frToast(FRUI.errMsg(x))}
+    try{await this.leaveSession()}finally{this.leaving=false}
   },
   toLobbyView(menu){
     $('frEnd').hidden=true;$('frGate').hidden=true;this.gate=false;$('reset').onclick();this.active=false;this.pids=[];
@@ -1686,13 +1698,21 @@ const FRG={
       h=(p?avatar(p,i):'')+`<div><div class="t">${esc(p?ft_.turnOf(p.name):'')}${mine?' · '+esc(ft_.you):''}${off?` <span class="frbd no">${esc(ft_.offline)}</span>`:''}</div><div class="s">${esc(ft_.jury(dn(C[voter].n)))} · ${esc(ft_.ballot(Math.min(done.size+1,N),N))}</div></div>${off?`<button class="tk" data-act="takeover">${esc(ft_.takeover(p.name))}</button>`:''}<div class="ps">${ps.map((x,j)=>`<i class="${p&&x.id===p.id?'on':''}" title="${esc(x.name)}"></i>`).join('')}</div>`;
       document.body.classList.toggle('frwatch',!!watch);
     }else{h=`<div><div class="t">${esc(phase==='row'?ft_.pubTurn:ft_.doneTurn)}</div></div>`;document.body.classList.remove('frwatch')}
-    bar.innerHTML=h;bar.hidden=false;
+    h+=FRUI.endBtn('frx xs');bar.innerHTML=h;bar.hidden=false;
   }
 };
 let GO_ORIG=null,VOTE_ORIG=null;
 
 /* ---------- screens ---------- */
 const FRUI={
+  armUntil:0,
+  endBtn(cls){const t=ft(),armed=Date.now()<this.armUntil,host=FRG.isHost;return `<button class="${cls||'frx'}${armed?' arm':''}" data-act="${host?'endSes':'leaveSes'}">${esc(armed?t.sure:(host?t.endSes:t.leaveSes))}</button>`},
+  endClick(){
+    if(Date.now()<this.armUntil){this.armUntil=0;FRG.endSession();return}
+    this.armUntil=Date.now()+4000;this.refreshEnd();setTimeout(()=>this.refreshEnd(),4100);
+  },
+  gateX(){const x=$('frGateX');if(!x)return;const show=!$('frGate').hidden&&FRG.active;x.hidden=!show;if(show)x.innerHTML=this.endBtn('frx xs')},
+  refreshEnd(){this.gateX();if(FRG.active)FRG.afterUI();if(!$('frEnd').hidden&&FRG.active)this.showEnd();else if(!$('frBox').hidden&&this.view==='lobby'&&!(document.activeElement&&document.activeElement.tagName==='INPUT'))this.renderLobby()},
   view:'menu',err:'',conn:'try',connErr:'',
   connP:null,
   setConn(c,e){this.conn=c;this.connErr=e||'';if(this._connRes)this._connRes();if(!$('frBox').hidden&&this.view==='menu')this.render()},
@@ -1703,7 +1723,7 @@ const FRUI={
     $('homeBox').hidden=true;$('pickBox').hidden=true;$('frBox').hidden=false;FRG.picking=false;
     if(this.conn==='try'){this.view='menu';this.render();await Promise.race([this.connP,new Promise(r=>setTimeout(r,13000))])}
     const s=FRG.sess();
-    if(s){FRG.setSess(s.room,FRG.online?FriendsBackend.uid:s.pid);await FRG.refresh();if(FRG.room&&FRG.room.players.some(p=>p.id===FRG.playerId)){this.view='lobby'}else{FRG.setSess(null);this.view='menu'}}
+    if(s){FRG.setSess(s.room,FRG.online?FriendsBackend.uid:s.pid);await FRG.refresh();if(FRG.room&&FRG.room.status!=='closed'&&FRG.room.players.some(p=>p.id===FRG.playerId)){this.view='lobby'}else{FRG.setSess(null);this.view='menu'}}
     else this.view='menu';
     this.render();FRG.onRoomChange();try{window.scrollTo({top:0})}catch(e){}
   },
@@ -1731,7 +1751,7 @@ const FRUI={
   async renderLobby(){
     const ft_=ft(),r=await FRG.refresh(),box=$('frView');
     if(this.view!=='lobby')return;
-    if(!r){FRG.setSess(null);this.view='menu';return this.render()}
+    if(!r||r.status==='closed'){FRG.setSess(null);this.view='menu';return this.render()}
     const me=r.players.find(p=>p.id===FRG.playerId),host=FRG.isHost,B=FriendsBackend;
     let h=`<div class="frhead"><h3>${esc(ft_.lobby)}</h3><span class="frrc"><small>${esc(ft_.roomCode)}</small>${r.code}<button class="frcp" data-act="copy" data-txt="${r.code}">${esc(ft_.copy)}</button></span></div>`;
     h+=`<div class="frsec">${esc(ft_.players)} (${r.players.length}/${B.MAXP})</div><div class="frpl">`;
@@ -1749,7 +1769,7 @@ const FRUI={
       if(host){const ok=r.players.length>=2&&r.players.every(p=>p.ready);
         const free=r.invites.filter(i=>!i.usedBy);
         if(free.length)h+=`<button data-act="copyAll">${esc(ft_.copyAll)}</button>`;
-        h+=`<button class="primary" data-act="start" ${ok?'':'disabled'}>${esc(ft_.start)}</button><span class="frhint">${esc(ok?'':ft_.startNeed)}</span>`;
+        h+=`<button class="primary" data-act="start" ${ok?'':'disabled'}>${esc(ft_.start)}</button><span class="frhint">${esc(ok?'':ft_.startNeed)}</span><div class="frhint" style="width:100%">${esc(ft_.seats)}</div>`;
       }else if(me){h+=`<button class="primary" data-act="ready">${esc(me.ready?ft_.iNotReady:ft_.iReady)}</button><span class="frhint">${esc(ft_.hostOnly)}</span>`}
       h+='</div>';
     }else if(r.status==='playing'){
@@ -1761,6 +1781,7 @@ const FRUI={
       h+=`<div class="frspec"><div class="frhint">${esc(ft_.finished)}</div><h4>${esc(ft_.final)}</h4><div class="frst">${this.standings(r)}</div></div>`;
       if(host)h+=`<div class="fract"><button class="primary" data-act="again">${esc(ft_.again)}</button></div>`;
     }
+    h+=`<div class="fract">${this.endBtn()}</div>`;
     box.innerHTML=h;
   },
   copy(txt,btn){
@@ -1768,7 +1789,7 @@ const FRUI={
     try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fb())}else fb()}catch(e){fb()}
     function fb(){const t=document.createElement('textarea');t.value=txt;t.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(e){}t.remove();done()}
   },
-  errMsg(e){const m=ft(),c=e&&e.code;return({empty:m.eCodeEmpty,format:m.eFormat,none:m.eNone,used:m.eUsed,started:m.eStarted,name:m.eName,taken:m.eTaken,full:m.eStarted,denied:m.eDenied,net:m.eNet})[c]||String(e&&e.message||e)},
+  errMsg(e){const m=ft(),c=e&&e.code;return({empty:m.eCodeEmpty,format:m.eFormat,none:m.eNone,used:m.eUsed,started:m.eStarted,name:m.eName,taken:m.eTaken,full:m.eStarted,closed:m.eClosed,denied:m.eDenied,net:m.eNet})[c]||String(e&&e.message||e)},
   async hostStart(){
     const r=await FRG.refresh();if(!r||!FRG.isHost)return;
     if(!(r.players.length>=2&&r.players.every(p=>p.ready))){this.render();return}
@@ -1781,7 +1802,7 @@ const FRUI={
       const mine=(g?g.votes:[]).filter(v=>v.playerId===p.id),byB={};mine.forEach(v=>{(byB[v.ballot]=byB[v.ballot]||[]).push(v)});
       const nb=Object.keys(byB).length;
       return `<details><summary>${avatar(p,pi)}<span>${esc(p.name)}</span><span style="margin-left:auto;font-weight:600;opacity:.8">${esc(ft_.nBallots(nb))}</span></summary>${Object.keys(byB).sort((a,b)=>a-b).map(b=>{const l=byB[b].sort((x,y)=>y.points-x.points);return `<div class="bl">${flag(l[0].voterCountry)} <b>${esc(dn(l[0].voterCountry))}</b> → ${l.map(v=>`<b>${v.points}</b> ${esc(dn(v.toCountry))}`).join(' · ')}</div>`}).join('')}</details>`}).join('');
-    $('frEnd').innerHTML=`<div class="fre"><h2>🏆 ${esc(ft_.endT)}</h2><div class="win">${flag(win.n)}<span>${esc(dn(win.n))} — ${esc(ft_.pts(win.pts))}</span></div><h4>${esc(ft_.final)}</h4><div class="frst">${w.slice(0,10).map((c,i)=>`<div><span class="no">${i+1}</span>${flag(c.n)}<span>${esc(dn(c.n))}</span><b>${c.pts}</b></div>`).join('')}</div><h4>${esc(ft_.votesT)}</h4>${bl}<div class="acts"><button data-act="viewBoard">${esc(ft_.view)}</button><button class="primary" data-act="again">${esc(ft_.again)}</button><button data-act="menu">${esc(ft_.menu)}</button></div></div>`;
+    $('frEnd').innerHTML=`<div class="fre"><h2>🏆 ${esc(ft_.endT)}</h2><div class="win">${flag(win.n)}<span>${esc(dn(win.n))} — ${esc(ft_.pts(win.pts))}</span></div><h4>${esc(ft_.final)}</h4><div class="frst">${w.slice(0,10).map((c,i)=>`<div><span class="no">${i+1}</span>${flag(c.n)}<span>${esc(dn(c.n))}</span><b>${c.pts}</b></div>`).join('')}</div><h4>${esc(ft_.votesT)}</h4>${bl}<div class="acts"><button data-act="viewBoard">${esc(ft_.view)}</button><button class="primary" data-act="again">${esc(ft_.again)}</button><button data-act="menu">${esc(ft_.menu)}</button>${this.endBtn()}</div></div>`;
     $('frEnd').hidden=false;
   },
   i18n(){
@@ -1807,6 +1828,7 @@ $('frView').addEventListener('click',async e=>{
     else if(a==='start')FRUI.hostStart();
     else if(a==='resume')FRG.resume();
     else if(a==='again')FRUI.playAgain();
+    else if(a==='endSes'||a==='leaveSes')FRUI.endClick();
   }catch(x){console.error(x)}
 });
 FRUI.playAgain=async()=>{
@@ -1821,6 +1843,7 @@ $('frEnd').addEventListener('click',async e=>{
   if(a==='viewBoard')$('frEnd').hidden=true;
   else if(a==='menu'){$('frEnd').hidden=true;$('reset').onclick();FRG.active=false;showHome()}
   else if(a==='again')FRUI.playAgain();
+  else if(a==='endSes'||a==='leaveSes')FRUI.endClick();
 });
 const FR_ON=async()=>{
   FRG.onRoomChange();
@@ -1830,7 +1853,9 @@ const FR_ON=async()=>{
 };
 FriendsBackend.subscribe(FR_ON);
 FRUI.connP=new Promise(r=>{FRUI._connRes=r});
-$('frBar').addEventListener('click',e=>{if(e.target.closest('[data-act=takeover]'))FRG.takeover()});
+$('frGateX').addEventListener('click',e=>{if(e.target.closest('[data-act=endSes],[data-act=leaveSes]'))FRUI.endClick()});
+new MutationObserver(()=>FRUI.gateX()).observe($('frGate'),{attributes:true,attributeFilter:['hidden']});
+$('frBar').addEventListener('click',e=>{if(e.target.closest('[data-act=takeover]'))FRG.takeover();else if(e.target.closest('[data-act=endSes],[data-act=leaveSes]'))FRUI.endClick()});
 setInterval(()=>{try{FRG.pump()}catch(e){}},60);
 
 /* home card */
@@ -1953,6 +1978,7 @@ function makeFirebaseBackend({db,uid,D}){
       catch(e){throw err('started')}
       detachOthers(room);await attach(room);
       const r=cache[room];
+      if(r&&r.status==='closed')throw err('closed');
       if(r&&r.players.some(p=>p.id!==uid&&p.name.toLowerCase()===nm.toLowerCase()&&p.joinedAt<=r.players.find(x=>x.id===uid).joinedAt)){
         try{await set(ref(db,`rooms/${room}/players/${uid}/name`),nm.slice(0,18)+' 2')}catch(e){}
       }
@@ -1986,6 +2012,7 @@ function makeFirebaseBackend({db,uid,D}){
       if(!r||r.status!=='done'){try{await set(ref(db,`rooms/${code}/status`),'done')}catch(e){}}
       return clone(cache[code]);
     },
+    async closeRoom(code){online();try{await set(ref(db,`rooms/${code}/status`),'closed')}catch(e){throw wrap(e)}return clone(cache[code])},
     async reopenLobby(code){
       online();const up={};['game','votes','byCountry','override','final'].forEach(k=>up[`rooms/${code}/${k}`]=null);up[`rooms/${code}/status`]='lobby';
       try{await update(ref(db),up)}catch(e){throw wrap(e)}
