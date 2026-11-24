@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -23,7 +22,7 @@ h1{margin:0}
 .logo .wm{width:min(640px,92vw);height:auto;overflow:visible;filter:drop-shadow(0 12px 22px rgba(20,8,70,.55))}
 @keyframes wmin{from{opacity:0;transform:translateY(-14px) scale(.96)}}
 .logo .wm .wmg{animation:none}
-.logo .wm{animation:wmin 1s cubic-bezier(.2,1,.3,1) both,wbob 5.5s ease-in-out 1s infinite}
+.logo .wm{animation:wmin 1s cubic-bezier(.2,1,.3,1) both}
 @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 .logo .wm .sweep{animation:wsw 5.5s ease-in-out 1.4s infinite}
 @keyframes wsw{0%{transform:translateX(0) skewX(18deg)}38%,100%{transform:translateX(1260px) skewX(18deg)}}
@@ -91,9 +90,7 @@ svg.flag{width:42px;height:28px;border-radius:4px;box-shadow:0 0 0 1px var(--lin
 .cn small{font-size:12px;color:var(--mut)}
 .row.voted{background:linear-gradient(90deg,rgba(39,225,255,.5),rgba(39,225,255,.12));box-shadow:inset 7px 0 0 var(--cyan)}
 .row.off.voted,.row.off.sms{opacity:.95}
-.row.voted::before,.row.sms::before,.row.cur::before{position:absolute;left:-6px;top:-6px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:900;z-index:2;box-shadow:0 0 0 2px var(--bg2)}
-.row.voted::before{content:"✓";background:var(--cyan);color:#06223a}
-.row.sms::before{content:"✓";background:#a855f7;color:#fff}
+.row.cur::before{position:absolute;left:-6px;top:-6px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:900;z-index:2;box-shadow:0 0 0 2px var(--bg2)}
 .row.cur::before{content:"🎤";background:var(--pink);font-size:9px}
 .row.r1.voted{background:linear-gradient(90deg,rgba(255,210,63,.22),var(--card))}
 .row.sms{background:linear-gradient(90deg,rgba(168,85,247,.34),var(--card));box-shadow:inset 6px 0 0 #a855f7}
@@ -509,6 +506,10 @@ footer{display:block;width:fit-content;max-width:100%;margin:12px auto 0;padding
 .frroom{padding:10px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .frroom .rc{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:800;letter-spacing:.12em}
 .frroom button{padding:4px 10px;font-size:13px}
+body.frwatch #board{pointer-events:none}
+.frtoast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);max-width:min(92vw,460px);padding:11px 16px;border-radius:12px;background:#2a1457;color:#fff;border:1px solid rgba(255,255,255,.25);box-shadow:0 8px 28px rgba(0,0,0,.45);font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:99999;text-align:center}
+.frtoast.on{opacity:1;transform:translate(-50%,0)}
+#frBar .tk{margin-left:auto;padding:6px 10px;font-size:12px}
 #frBar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 10px;padding:8px 12px;border-radius:14px;background:linear-gradient(90deg,rgba(255,210,63,.2),rgba(255,45,149,.16));border:1px solid rgba(255,210,63,.5)}
 #frBar .frav{width:32px;height:32px;font-size:15px}
 #frBar .t{font-weight:900;font-size:16px}
@@ -961,7 +962,7 @@ function renderGuide(){
     const body=num?'<ol>'+items.map(x=>'<li>'+lab(x[1])+'</li>').join('')+'</ol>':items.map(x=>'<div class="gi"><span class="gb">'+lab(x[0])+'</span><span>'+lab(x[1])+'</span></div>').join('');
     return '<section class="gsec"><h4>'+h+'</h4>'+body+'</section>'}).join('')+'<p class="gtip">'+g.tip+'</p>';
 }
-function applyLang(){
+function applyLang(){try{ui()}catch(e){}
   document.documentElement.lang=lang;
   document.querySelectorAll('[data-i]').forEach(e=>{e.textContent=tx()[e.dataset.i]});
   document.querySelectorAll('.lang button').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
@@ -1411,7 +1412,10 @@ en:{frMode:'👥 Play with Friends',frModeD:'Take turns casting Eurovision votes
  endT:'Voting completed!',winner:'Winner',final:'Final scoreboard',votesT:'Players’ votes',nBallots:n=>n+(n===1?' ballot':' ballots'),pts:p=>p+' pts',
  again:'🔁 Play again',menu:'🏠 Main menu',view:'View scoreboard',
  watching:'Game in progress — you are watching. In this prototype the voting itself happens on the Host’s screen.',live:'Live standings (jury votes so far)',nowVoting:'Now voting',resume:'▶ Resume game',finished:'The game is finished.',
- vcount:'votes cast',jOf:c=>'jury of '+c},
+ vcount:'votes cast',jOf:c=>'jury of '+c,
+ noteOn:'Online mode: friends join from their own phones with the invite code, and everyone votes on their own device when it is their turn.',cOn:'🌐 Online',cOff:'💻 This browser only',cTry:'Connecting…',
+ waitFor:n=>'Waiting for '+n+' to vote…',yourTurn:'It’s your turn — tap the button when you’re ready.',watchJury:(n,c)=>n+' votes as the jury of '+c,offline:'offline',takeover:n=>'Take over '+n+'’s turn',
+ needN:'Online games need at least 11 countries.',eNet:'Could not reach the server. Check your connection and try again.',eDenied:'The server did not allow this action.'},
 fr:{frMode:'👥 Jouer entre amis',frModeD:'Votez à tour de rôle avec jusqu’à 3 amis.',
  title:'Jouer entre amis',create:'🎟 Inviter un ami',createS:'Créer une partie',createD:'Ouvrez un salon, recevez 3 codes d’invitation et devenez l’hôte.',
  join:'🔑 Rejoindre un ami',joinS:'Rejoindre une partie',joinD:'Saisissez le code d’invitation reçu.',
@@ -1429,7 +1433,10 @@ fr:{frMode:'👥 Jouer entre amis',frModeD:'Votez à tour de rôle avec jusqu’
  endT:'Vote terminé !',winner:'Vainqueur',final:'Classement final',votesT:'Votes des joueurs',nBallots:n=>n+(n===1?' vote de jury':' votes de jury'),pts:p=>p+' pts',
  again:'🔁 Rejouer',menu:'🏠 Menu principal',view:'Voir le tableau',
  watching:'Partie en cours — vous regardez. Dans ce prototype, le vote se fait sur l’écran de l’hôte.',live:'Classement en direct (votes des jurys)',nowVoting:'Vote en cours',resume:'▶ Reprendre la partie',finished:'La partie est terminée.',
- vcount:'votes exprimés',jOf:c=>'jury : '+c},
+ vcount:'votes exprimés',jOf:c=>'jury : '+c,
+ noteOn:'Mode en ligne : vos amis rejoignent depuis leur téléphone avec le code d’invitation, et chacun vote sur son appareil quand c’est son tour.',cOn:'🌐 En ligne',cOff:'💻 Ce navigateur uniquement',cTry:'Connexion…',
+ waitFor:n=>'En attente du vote de '+n+'…',yourTurn:'C’est votre tour — appuyez sur le bouton quand vous êtes prêt.',watchJury:(n,c)=>n+' vote pour le jury : '+c,offline:'hors ligne',takeover:n=>'Reprendre le tour de '+n,
+ needN:'Une partie en ligne nécessite au moins 11 pays.',eNet:'Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.',eDenied:'Le serveur a refusé cette action.'},
 tr:{frMode:'👥 Arkadaşlarla Oyna',frModeD:'En fazla 3 arkadaşınla sırayla Eurovision oyu kullan.',
  title:'Arkadaşlarla Oyna',create:'🎟 Arkadaşını Davet Et',createS:'Oyun Oluştur',createD:'Bir oda aç, 3 davet kodu al ve Host ol.',
  join:'🔑 Arkadaşına Katıl',joinS:'Oyuna Katıl',joinD:'Sana gönderilen davet kodunu gir.',
@@ -1447,13 +1454,16 @@ tr:{frMode:'👥 Arkadaşlarla Oyna',frModeD:'En fazla 3 arkadaşınla sırayla 
  endT:'Oylama tamamlandı!',winner:'Kazanan',final:'Final skor tablosu',votesT:'Oyuncuların oyları',nBallots:n=>n+' jüri oylaması',pts:p=>p+' puan',
  again:'🔁 Yeniden oyna',menu:'🏠 Ana menüye dön',view:'Skor tablosunu gör',
  watching:'Oyun sürüyor — izliyorsun. Bu prototipte oylamanın kendisi Host’un ekranında yapılır.',live:'Canlı sıralama (şu ana kadarki jüri oyları)',nowVoting:'Şu an oy kullanan',resume:'▶ Oyuna devam et',finished:'Oyun bitti.',
- vcount:'oy kullanıldı',jOf:c=>c+' jürisi'}
+ vcount:'oy kullanıldı',jOf:c=>c+' jürisi',
+ noteOn:'Çevrimiçi mod: arkadaşların kendi telefonundan davet koduyla katılır ve sırası gelen herkes kendi cihazından oy kullanır.',cOn:'🌐 Çevrimiçi',cOff:'💻 Yalnızca bu tarayıcı',cTry:'Bağlanılıyor…',
+ waitFor:n=>n+' oy kullanıyor, bekleniyor…',yourTurn:'Sıra sende — hazır olunca düğmeye dokun.',watchJury:(n,c)=>n+', '+c+' jürisi adına oy kullanıyor',offline:'çevrimdışı',takeover:n=>n+' için sırayı devral',
+ needN:'Çevrimiçi oyun için en az 11 ülke gerekir.',eNet:'Sunucuya ulaşılamadı. Bağlantını kontrol edip tekrar dene.',eDenied:'Sunucu bu işleme izin vermedi.'}
 };
 const ft=()=>FL[lang];
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 /* ---------- storage adapter (replace this object with Firebase/Supabase/WebSocket later) ---------- */
-const FriendsBackend=(()=>{
+const LocalBackend=(()=>{
   const KEY='ev_friends_v1',subs=new Set(),AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',MAXP=4;
   const load=()=>{try{const d=JSON.parse(localStorage.getItem(KEY));return d&&d.rooms?d:{rooms:{}}}catch(e){return{rooms:{}}}};
   const save=d=>{try{localStorage.setItem(KEY,JSON.stringify(d))}catch(e){}};
@@ -1466,7 +1476,8 @@ const FriendsBackend=(()=>{
   const mutate=(code,fn)=>{const d=load(),r=d.rooms[code];if(!r)throw err('noroom');fn(r,d);save(d);notify();return clone(r)};
   addEventListener('storage',e=>{if(e.key===KEY)notify()});
   return{
-    MAXP,fmt:c=>c.length===8?c.slice(0,4)+'-'+c.slice(4):c,norm,
+    kind:'local',MAXP,fmt:c=>c.length===8?c.slice(0,4)+'-'+c.slice(4):c,norm,
+    peek(code){return clone(load().rooms[code]||null)},
     subscribe(f){subs.add(f);return()=>subs.delete(f)},
     async createRoom(hostName){
       const name=String(hostName||'').trim().slice(0,20);if(!name)throw err('name');
@@ -1519,58 +1530,102 @@ const FriendsBackend=(()=>{
     async reopenLobby(code){return mutate(code,r=>{r.status='lobby';r.game=null;r.players.forEach(p=>{if(!p.isHost)p.ready=false})})}
   };
 })();
+/* The UI talks to FriendsBackend only. It starts on LocalBackend (same browser) and is switched to the
+   Firebase backend by the module script at the end of the page once the online connection is ready. */
+let FR_IMPL=LocalBackend;
+const FriendsBackend=new Proxy({},{get:(_,k)=>{const v=FR_IMPL[k];return typeof v==='function'?v.bind(FR_IMPL):v}});
+function useBackend(b){FR_IMPL=b;try{b.subscribe(FR_ON)}catch(e){}}
+const frToast=m=>{let t=document.getElementById('frToast');if(!t){t=document.createElement('div');t.id='frToast';t.className='frtoast';document.body.appendChild(t)}t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),4200)};
 
 /* ---------- game controller: plugs into the existing engine without changing its scoring ---------- */
 const AVC=[['#ff2d95','#7a3cff'],['#27e1ff','#3b6bff'],['#ffd23f','#ff7a3c'],['#4ade80','#16a3a3']];
 const avatar=(p,i)=>`<span class="frav" style="--c1:${AVC[i%4][0]};--c2:${AVC[i%4][1]}">${esc((p.name||'?').trim().charAt(0).toUpperCase())}</span>`;
 const FRG={
-  active:false,picking:false,gate:false,roomCode:null,playerId:null,room:null,pids:[],
-  sess(){try{return JSON.parse(sessionStorage.getItem('ev_fr_session'))}catch(e){return null}},
-  setSess(room,pid){this.roomCode=room;this.playerId=pid;try{if(room)sessionStorage.setItem('ev_fr_session',JSON.stringify({room,pid}));else sessionStorage.removeItem('ev_fr_session')}catch(e){}},
+  active:false,picking:false,gate:false,starting:false,joining:false,roomCode:null,playerId:null,room:null,pids:[],seed:1,sending:false,gateTok:0,pend:null,applying:false,
+  get online(){return FriendsBackend.kind==='firebase'},
+  sess(){try{return JSON.parse((this.online?localStorage:sessionStorage).getItem('ev_fr_session'))}catch(e){return null}},
+  setSess(room,pid){this.roomCode=room;this.playerId=pid;try{const st=this.online?localStorage:sessionStorage;if(room)st.setItem('ev_fr_session',JSON.stringify({room,pid}));else st.removeItem('ev_fr_session')}catch(e){}},
   async refresh(){this.room=this.roomCode?await FriendsBackend.getRoom(this.roomCode):null;return this.room},
   get isHost(){return !!(this.room&&this.room.hostId===this.playerId)},
   players(){const r=this.room;if(!r)return[];const ids=this.pids.length?this.pids:r.players.map(p=>p.id);return ids.map(id=>r.players.find(p=>p.id===id)).filter(Boolean)},
   playerOfBallot(b){const ps=this.players();return ps.length?ps[b%ps.length]:null},
   curBallot(){return order.findIndex(x=>!done.has(x))},
+  /* online: may this device cast the votes of ballot b? (its own seat, or a turn it took over for an absent player) */
+  canVoteBallot(b){const pl=this.playerOfBallot(b),g=this.room&&this.room.game;return !!pl&&(pl.id===this.playerId||!!(g&&g.override&&g.override[b]===this.playerId))},
+  canVote(){return this.canVoteBallot(order.indexOf(voter))},
   /* called after the host chose the countries and the engine started */
   async begin(){
-    const r=await this.refresh();this.pids=r.players.map(p=>p.id);this.active=true;this.picking=false;
-    this.room=await FriendsBackend.beginGame(this.roomCode,{countries:C.map(c=>c.n),order:order.slice(),playerIds:this.pids});
+    const r=await this.refresh();this.starting=true;this.pids=r.players.map(p=>p.id);this.active=true;this.picking=false;
+    this.seed=(window.crypto&&crypto.getRandomValues?crypto.getRandomValues(new Uint32Array(1))[0]:Math.floor(Math.random()*4294967295))>>>0;
+    try{this.room=await FriendsBackend.beginGame(this.roomCode,{countries:C.map(c=>c.n),order:order.slice(),playerIds:this.pids,seed:this.seed,year:yearMode?selYear:null})}
+    catch(x){this.starting=false;frToast(FRUI.errMsg(x));this.toLobbyView();return}
+    this.starting=false;
     FRUI.hideBox();this.showGate(null,this.playerOfBallot(0),'first');ui();
   },
+  /* local mode: the Host's engine records every vote.  online mode: castOnline() writes first, the engine follows */
   async record(e){
-    if(!this.active||e.v<0)return;
+    if(!this.active||this.online||e.v<0)return;
     const b=order.indexOf(e.v),p=this.playerOfBallot(b);if(!p)return;
     try{this.room=await FriendsBackend.appendVote(this.roomCode,{ballot:b,playerId:p.id,voterCountry:C[e.v].n,toCountry:C[e.i].n,points:e.p})}
     catch(x){console.warn('[friends] vote rejected:',x.code||x.message)}
   },
+  /* online: the vote is written to the server first; the engine then shows it through pump(), exactly like
+     a vote that arrived from another device (so every device runs the same code path) */
+  async castOnline(i){
+    if(this.sending||busy||phase!=='jury'||k>=NV||i===voter||i in given||!this.canVote())return;
+    const b=order.indexOf(voter),p=SC[k],pl=this.playerOfBallot(b),key=b+'|'+p;
+    if(this.pend===key)return;
+    this.sending=true;this.pend=key;
+    try{await FriendsBackend.appendVote(this.roomCode,{ballot:b,playerId:pl.id,voterCountry:C[voter].n,toCountry:C[i].n,points:p})}
+    catch(x){this.pend=null;frToast(FRUI.errMsg(x))}
+    finally{this.sending=false}
+  },
+  /* online: apply votes stored in the room (own or from other devices), one by one in point order */
+  pump(){
+    if(!this.active||!this.online||this.gate||this.applying||phase!=='jury'||busy||k>=NV)return;
+    const g=this.room&&this.room.game;if(!g)return;
+    const b=order.indexOf(voter),want=SC[k];
+    const v=g.votes.find(x=>x.ballot===b&&x.points===want);if(!v)return;
+    const ci=C.findIndex(c=>c.n===v.toCountry);if(ci<0||ci===voter||ci in given)return;
+    const k0=k;this.applying=true;try{VOTE_ORIG(ci)}finally{this.applying=false}
+    if(k>k0||busy)this.pend=null;
+  },
   async ballotDone(v){
     if(!this.active)return;
     const b=order.indexOf(v),nb=this.curBallot(),prev=this.playerOfBallot(b);
-    this.room=await FriendsBackend.setBallot(this.roomCode,done.size);
+    this.room=await FriendsBackend.setBallot(this.roomCode,done.size)||this.room;
     if(nb<0){this.showGate(prev,null,'allin');return}
     this.showGate(prev,this.playerOfBallot(nb),'next');
   },
   showGate(prev,pl,kind){
-    const g=$('frGate');this.gate=true;
-    const idx=pl?this.players().findIndex(p=>p.id===pl.id):0,ft_=ft();
+    const g=$('frGate');this.gate=true;const tok=++this.gateTok;
+    const ps=this.players(),idx=pl?Math.max(0,ps.findIndex(p=>p.id===pl.id)):0,ft_=ft();
     if(kind==='allin'){
-      g.innerHTML=`<div class="frg">${prev?avatar(prev,this.players().findIndex(p=>p.id===prev.id)):''}<div class="frg-t">${esc(ft_.allIn(prev?prev.name:''))}</div></div>`;g.hidden=false;
-      setTimeout(()=>{this.gate=false;g.hidden=true;next()},3200);return;
+      g.innerHTML=`<div class="frg">${prev?avatar(prev,ps.findIndex(p=>p.id===prev.id)):''}<div class="frg-t">${esc(ft_.allIn(prev?prev.name:''))}</div></div>`;g.hidden=false;
+      setTimeout(()=>{if(tok!==this.gateTok)return;this.gate=false;g.hidden=true;next()},3200);return;
     }
-    const cn=dn(C[order[Math.max(0,this.curBallot())]].n),fl=flag(C[order[Math.max(0,this.curBallot())]].n);
-    g.innerHTML=`<div class="frg">${avatar(pl,idx)}<div class="frg-t">${esc(kind==='first'?ft_.first(pl.name):ft_.thanks(prev.name,pl.name))}</div><div class="frg-j">${fl}<span>${esc(ft_.gateJury(cn))}</span></div><p class="frg-h">${esc(ft_.gateHint)}</p><button class="primary" id="frGo">${esc(ft_.gateBtn(pl.name))}</button></div>`;
-    g.hidden=false;
-    $('frGo').onclick=()=>{this.gate=false;g.hidden=true;if(kind==='next')next();else ui()};
+    const bi=Math.max(0,this.curBallot()),cn=dn(C[order[bi]].n),fl=flag(C[order[bi]].n);
+    const mine=!this.online||this.canVoteBallot(bi);
+    const title=kind==='first'?ft_.first(pl.name):(kind==='resume'&&this.online)?ft_.turnOf(pl.name):kind==='resume'?ft_.first(pl.name):ft_.thanks(prev.name,pl.name);
+    const go=()=>{if(tok!==this.gateTok)return;this.gate=false;g.hidden=true;if(kind==='next')next();else ui()};
+    if(mine){
+      g.innerHTML=`<div class="frg">${avatar(pl,idx)}<div class="frg-t">${esc(title)}</div><div class="frg-j">${fl}<span>${esc(ft_.gateJury(cn))}</span></div><p class="frg-h">${esc(this.online?ft_.yourTurn:ft_.gateHint)}</p><button class="primary" id="frGo">${esc(ft_.gateBtn(pl.name))}</button></div>`;
+      g.hidden=false;$('frGo').onclick=go;
+    }else{
+      g.innerHTML=`<div class="frg">${avatar(pl,idx)}<div class="frg-t">${esc(title)}</div><div class="frg-j">${fl}<span>${esc(ft_.watchJury(pl.name,cn))}</span></div><p class="frg-h">${esc(ft_.waitFor(pl.name))}</p></div>`;
+      g.hidden=false;setTimeout(go,3400);
+    }
   },
   async finish(){
     if(!this.active)return;
     const fin=[...C].sort((a,b)=>b.pts-a.pts||a.i-b.i).map(c=>({country:c.n,pts:c.pts}));
-    this.room=await FriendsBackend.finishGame(this.roomCode,fin);
+    this.room=await FriendsBackend.finishGame(this.roomCode,fin)||this.room;
   },
+  /* rebuild the engine from the stored votes (page refresh, or a device joining a running game) */
   async resume(){
     const r=await this.refresh(),g=r&&r.game;if(!g)return;
-    this.pids=g.playerIds.slice();chosen.clear();g.countries.forEach(n=>chosen.add(n));this.picking=false;
+    this.pids=g.playerIds.slice();this.seed=g.seed>>>0||1;chosen.clear();g.countries.forEach(n=>chosen.add(n));this.picking=false;
+    yearMode=!!g.year;selYear=g.year||null;mode='normal';
     FRUI.hideBox();$('pickBox').hidden=true;
     GO_ORIG();order=g.order.slice();HIST=[];done.clear();C.forEach(c=>c.pts=0);given={};k=0;
     const cnt={};
@@ -1580,42 +1635,88 @@ const FRG={
     if(nv===undefined){startROW();return}
     startVoter(nv);
     g.votes.filter(v=>C.findIndex(c=>c.n===v.voterCountry)===nv).forEach(v=>{const ci=C.findIndex(c=>c.n===v.toCountry);given[ci]=v.points;k++});
-    ui();this.showGate(null,this.playerOfBallot(order.indexOf(nv)),'first');
+    ui();this.showGate(null,this.playerOfBallot(order.indexOf(nv)),'resume');
   },
+  /* public (SMS) vote: the whole sequence is computed from the shared seed, so every device shows the same result */
+  smsPlan(){
+    const sv={rp:rowPos,sr:smsRem,us:usedSMS,mr:Math.random};
+    let st=(this.seed>>>0)||1;const rand=()=>{st|=0;st=st+0x6D2B79F5|0;let t=Math.imul(st^st>>>15,1|st);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+    const out=[];Math.random=rand;
+    try{rowPos=0;smsRem=5000;usedSMS=new Set();for(let i=0;i<N;i++){const v=smsPick();out.push(v);smsRem-=v;if(v>0)usedSMS.add(v);rowPos++}}
+    finally{Math.random=sv.mr;rowPos=sv.rp;smsRem=sv.sr;usedSMS=sv.us}
+    return out;
+  },
+  async autoSMS(){
+    if(phase!=='row'||busy)return;
+    const plan=this.smsPlan();busy=true;autoRun='rauto';stopReq=false;ui();
+    while(phase==='row'&&!stopReq){await sleep(1100);if(stopReq)break;await rowGive(plan[rowPos],true)}
+    autoRun=null;stopReq=false;busy=false;ui();
+  },
+  /* online: react to every change of the shared room */
+  onRoomChange(){
+    if(!this.roomCode)return;
+    const r=FriendsBackend.peek(this.roomCode);if(r===undefined)return;
+    this.room=r;if(!this.online)return;
+    if(this.active){
+      if(!r&&!this.starting){this.toLobbyView(true);return}
+      if(r&&r.status==='lobby'&&!this.starting){this.dropToLobby();return}
+      this.afterUI();return;
+    }
+    if(r&&r.status==='playing'&&r.game&&!this.picking&&!this.joining&&!this.starting&&r.players.some(p=>p.id===this.playerId)){
+      this.joining=true;this.resume().catch(e=>console.warn(e)).finally(()=>{this.joining=false});
+    }
+  },
+  toLobbyView(menu){
+    $('frEnd').hidden=true;$('frGate').hidden=true;this.gate=false;$('reset').onclick();this.active=false;this.pids=[];
+    if(menu)this.setSess(null);
+    $('setup').hidden=false;$('homeBox').hidden=true;$('pickBox').hidden=true;$('frBox').hidden=false;FRUI.view=menu?'menu':'lobby';FRUI.render();
+  },
+  dropToLobby(){
+    if(!this.isHost)FriendsBackend.setReady(this.roomCode,this.playerId,false).catch(()=>{});
+    this.toLobbyView();
+  },
+  async takeover(){const b=order.indexOf(voter);try{await FriendsBackend.claimTurn(this.roomCode,b)}catch(x){frToast(FRUI.errMsg(x))}},
   afterUI(){
-    const bar=$('frBar');if(!this.active){bar.hidden=true;return}
+    const bar=$('frBar');if(!this.active){bar.hidden=true;document.body.classList.remove('frwatch');return}
     sel.disabled=true;['quick','auto','ball','bff'].forEach(id=>$(id).hidden=true);$('back').hidden=true;$('rowbox').hidden=true;
     const ft_=ft(),ps=this.players();let h='';
     if(phase==='jury'){
       const b=order.indexOf(voter),p=this.playerOfBallot(b),i=ps.findIndex(x=>p&&x.id===p.id);
-      h=(p?avatar(p,i):'')+`<div><div class="t">${esc(p?ft_.turnOf(p.name):'')}</div><div class="s">${esc(ft_.jury(dn(C[voter].n)))} · ${esc(ft_.ballot(Math.min(done.size+1,N),N))}</div></div><div class="ps">${ps.map((x,j)=>`<i class="${p&&x.id===p.id?'on':''}" title="${esc(x.name)}"></i>`).join('')}</div>`;
-    }else h=`<div><div class="t">${esc(phase==='row'?ft_.pubTurn:ft_.doneTurn)}</div></div>`;
+      const mine=this.online&&this.canVote(),watch=this.online&&!mine,off=watch&&p&&p.online===false;
+      h=(p?avatar(p,i):'')+`<div><div class="t">${esc(p?ft_.turnOf(p.name):'')}${mine?' · '+esc(ft_.you):''}${off?` <span class="frbd no">${esc(ft_.offline)}</span>`:''}</div><div class="s">${esc(ft_.jury(dn(C[voter].n)))} · ${esc(ft_.ballot(Math.min(done.size+1,N),N))}</div></div>${off?`<button class="tk" data-act="takeover">${esc(ft_.takeover(p.name))}</button>`:''}<div class="ps">${ps.map((x,j)=>`<i class="${p&&x.id===p.id?'on':''}" title="${esc(x.name)}"></i>`).join('')}</div>`;
+      document.body.classList.toggle('frwatch',!!watch);
+    }else{h=`<div><div class="t">${esc(phase==='row'?ft_.pubTurn:ft_.doneTurn)}</div></div>`;document.body.classList.remove('frwatch')}
     bar.innerHTML=h;bar.hidden=false;
   }
 };
-let GO_ORIG=null;
+let GO_ORIG=null,VOTE_ORIG=null;
 
 /* ---------- screens ---------- */
 const FRUI={
-  view:'menu',err:'',
+  view:'menu',err:'',conn:'try',connErr:'',
+  connP:null,
+  setConn(c,e){this.conn=c;this.connErr=e||'';if(this._connRes)this._connRes();if(!$('frBox').hidden&&this.view==='menu')this.render()},
+  connChip(){const t=ft();return this.conn==='on'?`<span class="frbd ok">${esc(t.cOn)}</span>`:this.conn==='try'?`<span class="frbd">${esc(t.cTry)}</span>`:`<span class="frbd no">${esc(t.cOff)}</span>${this.connErr?` <small class="frhint">(${esc(this.connErr)})</small>`:''}`},
   box:()=>$('frBox'),
   hideBox(){$('frBox').hidden=true},
   async open(){
     $('homeBox').hidden=true;$('pickBox').hidden=true;$('frBox').hidden=false;FRG.picking=false;
+    if(this.conn==='try'){this.view='menu';this.render();await Promise.race([this.connP,new Promise(r=>setTimeout(r,13000))])}
     const s=FRG.sess();
-    if(s){FRG.setSess(s.room,s.pid);await FRG.refresh();if(FRG.room&&FRG.room.players.some(p=>p.id===s.pid)){this.view='lobby'}else{FRG.setSess(null);this.view='menu'}}
+    if(s){FRG.setSess(s.room,FRG.online?FriendsBackend.uid:s.pid);await FRG.refresh();if(FRG.room&&FRG.room.players.some(p=>p.id===FRG.playerId)){this.view='lobby'}else{FRG.setSess(null);this.view='menu'}}
     else this.view='menu';
-    this.render();try{window.scrollTo({top:0})}catch(e){}
+    this.render();FRG.onRoomChange();try{window.scrollTo({top:0})}catch(e){}
   },
   go(v){this.view=v;this.err='';this.render()},
   async render(){
     const ft_=ft(),box=$('frView'),v=this.view;$('frBadge').textContent=ft_.title;$('frBack').textContent=ft_.back;
     if(v==='menu'){
-      const rooms=await FriendsBackend.listRooms();
+      const online=FriendsBackend.kind==='firebase',rooms=online?[]:await FriendsBackend.listRooms();
       if(this.view!=='menu')return;
       box.innerHTML=`<div class="frgrid"><button class="mode" data-act="create"><b>${ft_.create}</b><br><small>${esc(ft_.createS)} — ${esc(ft_.createD)}</small></button><button class="mode" data-act="join"><b>${ft_.join}</b><br><small>${esc(ft_.joinS)} — ${esc(ft_.joinD)}</small></button></div>
-      <div class="frnote">⚠️ ${esc(ft_.note)}</div>
+      <div class="frnote">${this.connChip()} ${esc(online?ft_.noteOn:'⚠️ '+ft_.note)}</div>
       <div class="frsec">${esc(ft_.rooms)}</div><div class="frrooms">${rooms.length?rooms.map(r=>`<div class="frroom"><span class="rc">${r.code}</span><span class="frbd">${esc(r.status==='lobby'?ft_.stLobby:r.status==='playing'?ft_.stPlaying:ft_.stDone)}</span><span class="frhint">${esc(ft_.openAs)}:</span>${r.players.map(p=>`<button data-act="open" data-room="${r.code}" data-pid="${p.id}">${esc(p.name)}${p.isHost?' ★':''}</button>`).join('')}</div>`).join(''):`<div class="frhint">${esc(ft_.noRooms)}</div>`}</div>`;
+      if(online){const a=box.querySelector('.frsec'),b=box.querySelector('.frrooms');if(a)a.remove();if(b)b.remove()}
     }else if(v==='create'){
       box.innerHTML=`<div class="frhead"><h3>${esc(ft_.createS)}</h3></div><div class="frf"><label for="frName">${esc(ft_.yourName)}</label><input id="frName" maxlength="20" placeholder="${esc(ft_.namePh)}" autocomplete="off"></div><div class="frerr" id="frErr">${esc(this.err)}</div><div class="fract"><button class="primary" data-act="doCreate">${esc(ft_.createBtn)}</button></div>`;
     }else if(v==='join'){
@@ -1652,7 +1753,8 @@ const FRUI={
       }else if(me){h+=`<button class="primary" data-act="ready">${esc(me.ready?ft_.iNotReady:ft_.iReady)}</button><span class="frhint">${esc(ft_.hostOnly)}</span>`}
       h+='</div>';
     }else if(r.status==='playing'){
-      if(host&&!FRG.active)h+=`<div class="fract"><button class="primary" data-act="resume">${esc(ft_.resume)}</button></div>`;
+      if(FRG.online)h+=`<div class="frspec"><div class="frhint">${esc(ft_.cTry)}</div></div>`;
+      else if(host&&!FRG.active)h+=`<div class="fract"><button class="primary" data-act="resume">${esc(ft_.resume)}</button></div>`;
       else if(!host){const g=r.game,b=g?g.ballot:0,ps=g?g.playerIds.map(id=>r.players.find(p=>p.id===id)).filter(Boolean):[],cur=ps.length?ps[b%ps.length]:null;
         h+=`<div class="frspec"><div class="frhint">${esc(ft_.watching)}</div>${cur?`<h4>${esc(ft_.nowVoting)}: ${esc(cur.name)}</h4>`:''}<h4>${esc(ft_.live)}</h4><div class="frst">${this.standings(r)}</div><div class="frhint" style="margin-top:6px">${g?g.votes.length:0} ${esc(ft_.vcount)}</div></div>`}
     }else{
@@ -1666,7 +1768,7 @@ const FRUI={
     try{if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fb())}else fb()}catch(e){fb()}
     function fb(){const t=document.createElement('textarea');t.value=txt;t.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(t);t.select();try{document.execCommand('copy')}catch(e){}t.remove();done()}
   },
-  errMsg(e){const m=ft(),c=e&&e.code;return({empty:m.eCodeEmpty,format:m.eFormat,none:m.eNone,used:m.eUsed,started:m.eStarted,name:m.eName,taken:m.eTaken,full:m.eStarted})[c]||String(e&&e.message||e)},
+  errMsg(e){const m=ft(),c=e&&e.code;return({empty:m.eCodeEmpty,format:m.eFormat,none:m.eNone,used:m.eUsed,started:m.eStarted,name:m.eName,taken:m.eTaken,full:m.eStarted,denied:m.eDenied,net:m.eNet})[c]||String(e&&e.message||e)},
   async hostStart(){
     const r=await FRG.refresh();if(!r||!FRG.isHost)return;
     if(!(r.players.length>=2&&r.players.every(p=>p.ready))){this.render();return}
@@ -1709,7 +1811,9 @@ $('frView').addEventListener('click',async e=>{
 });
 FRUI.playAgain=async()=>{
   $('frEnd').hidden=true;$('reset').onclick();
-  await FriendsBackend.reopenLobby(FRG.roomCode);FRG.active=false;FRG.pids=[];await FRG.refresh();
+  if(!FRG.online||FRG.isHost){try{await FriendsBackend.reopenLobby(FRG.roomCode)}catch(x){frToast(FRUI.errMsg(x))}}
+  else FriendsBackend.setReady(FRG.roomCode,FRG.playerId,false).catch(()=>{});
+  FRG.active=false;FRG.pids=[];await FRG.refresh();
   $('setup').hidden=false;$('homeBox').hidden=true;$('pickBox').hidden=true;$('frBox').hidden=false;FRUI.view='lobby';FRUI.render();
 };
 $('frEnd').addEventListener('click',async e=>{
@@ -1718,17 +1822,23 @@ $('frEnd').addEventListener('click',async e=>{
   else if(a==='menu'){$('frEnd').hidden=true;$('reset').onclick();FRG.active=false;showHome()}
   else if(a==='again')FRUI.playAgain();
 });
-FriendsBackend.subscribe(async()=>{
+const FR_ON=async()=>{
+  FRG.onRoomChange();
   if($('frBox').hidden||FRUI.view!=='lobby')return;
   if(document.activeElement&&document.activeElement.tagName==='INPUT')return;
   FRUI.renderLobby();
-});
+};
+FriendsBackend.subscribe(FR_ON);
+FRUI.connP=new Promise(r=>{FRUI._connRes=r});
+$('frBar').addEventListener('click',e=>{if(e.target.closest('[data-act=takeover]'))FRG.takeover()});
+setInterval(()=>{try{FRG.pump()}catch(e){}},60);
 
 /* home card */
 document.querySelectorAll('.mode').forEach(b=>{if(b.dataset.m==='friends'){const old=b.onclick;b.onclick=()=>FRUI.open()}});
 GO_ORIG=$('go').onclick;
 $('go').onclick=async()=>{
   if(!FRG.picking){GO_ORIG();return}
+  if(FRG.online&&chosen.size<11){frToast(ft().needN);return}
   const r=await FRG.refresh();if(!r||r.players.length<2){FRUI.hideBox();return}
   GO_ORIG();await FRG.begin();
 };
@@ -1736,8 +1846,8 @@ $('go').onclick=async()=>{
 {
   const _ui=ui;ui=function(){_ui();FRG.afterUI()};
   const _award=award;award=async function(i){const n=HIST.length;await _award(i);if(FRG.active&&HIST.length>n)FRG.record(HIST[HIST.length-1])};
-  const _vote=vote;vote=function(i){if(FRG.active&&(FRG.gate||phase!=='jury'))return;_vote(i)};
-  const _sr=startROW;startROW=function(){_sr();if(FRG.active)setTimeout(()=>{if(phase==='row'&&!busy)$('rauto').click()},1500)};
+  const _vote=vote;VOTE_ORIG=_vote;vote=function(i){if(FRG.active&&(FRG.gate||phase!=='jury'))return;if(FRG.active&&FRG.online){FRG.castOnline(i);return}_vote(i)};
+  const _sr=startROW;startROW=function(){_sr();if(FRG.active)setTimeout(()=>{if(phase==='row'&&!busy)FRG.autoSMS()},1500)};
   const _sw=showWinner;showWinner=function(){_sw();if(FRG.active)FRG.finish()};
   const _wc=$('wclose').onclick;$('wclose').onclick=()=>{_wc();if(FRG.active&&phase==='end')FRUI.showEnd()};
   const _rs=$('reset').onclick;$('reset').onclick=()=>{_rs();$('frEnd').hidden=true;$('frGate').hidden=true;FRG.gate=false;FRG.active=false;FRG.picking=false;$('frBar').hidden=true};
@@ -1749,7 +1859,151 @@ $('go').onclick=async()=>{
 FRUI.i18n();
 
 </script>
+<script type="module">
+/* ===== Online backend: Firebase Realtime Database + Anonymous Auth (free Spark plan, no server code) =====
+   Loaded as a module. If the SDK cannot be loaded or the server cannot be reached (for example inside a
+   sandboxed preview), the game keeps working in the same-browser prototype mode (LocalBackend).
+   Security lives in database.rules.json (publish it in Firebase console -> Realtime Database -> Rules). */
+const FB_CONFIG={
+  apiKey:"AIzaSyDlySpKEW8Iqm2FSfslDAlStQ2j1S8ybs8",
+  authDomain:"eurovote12.firebaseapp.com",
+  databaseURL:"https://eurovote12-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"eurovote12",
+  storageBucket:"eurovote12.firebasestorage.app",
+  messagingSenderId:"644886478876",
+  appId:"1:644886478876:web:9f53b168f882152737dfd9"
+};
+const FB_SDK=window.EV_FB_SDK||'https://www.gstatic.com/firebasejs/10.14.1/';
+const tmo=(p,ms,code)=>Promise.race([p,new Promise((_,rj)=>setTimeout(()=>rj(Object.assign(new Error(code),{code})),ms))]);
+
+function makeFirebaseBackend({db,uid,D}){
+  const {ref,set,get,update,onValue,onDisconnect}=D;
+  const AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',MAXP=4,subs=new Set();
+  const rnd=n=>{const a=new Uint32Array(n);crypto.getRandomValues(a);return Array.from(a,x=>AL[x%AL.length]).join('')};
+  const err=c=>Object.assign(new Error(c),{code:c});
+  const clone=o=>o==null?o:JSON.parse(JSON.stringify(o));
+  const norm=LocalBackend.norm,fmt=LocalBackend.fmt;
+  const ks=o=>Object.keys(o||{}).filter(k=>o[k]!=null);
+  const arr=o=>Array.isArray(o)?o.slice():ks(o).sort((a,b)=>a-b).map(k=>o[k]);
+  const wrap=e=>{const m=String((e&&e.code)||'')+' '+String((e&&e.message)||'');return /PERMISSION_DENIED|permission.denied/i.test(m)?err('denied'):e};
+  let connected=false,connRes;const connP=new Promise(r=>connRes=r);
+  const cache={},watch={};
+  const notify=()=>subs.forEach(f=>{try{f()}catch(e){}});
+  onValue(ref(db,'.info/connected'),s=>{connected=!!s.val();if(connected)connRes();notify()});
+  const online=()=>{if(!connected)throw err('net')};
+
+  /* RTDB tree -> the room object the UI already understands */
+  function conv(code,v){
+    if(!v)return null;
+    const pres=v.presence||{};
+    const players=ks(v.players).map(id=>{const p=v.players[id];return{id,name:p.name,isHost:id===v.hostUid,ready:!!p.ready,inviteCode:p.inviteCode||null,joinedAt:p.joinedAt||0,online:!!pres[id]}}).sort((a,b)=>a.joinedAt-b.joinedAt);
+    const invites=ks(v.inviteCodes).sort().map(c=>{const u=players.find(p=>p.inviteCode===c);return{code:c,usedBy:u?u.id:null}});
+    let game=null;const g=v.game;
+    if(g){
+      const countries=arr(g.countries),order=arr(g.order),seq=arr(g.seq),vb=v.votes||{},votes=[];
+      ks(vb).map(Number).sort((a,b)=>a-b).forEach(b=>{const o=vb[b];ks(o).map(Number).sort((x,y)=>x-y).forEach(p=>{votes.push({ballot:b,playerId:seq[b]?seq[b].u:'',voterCountry:countries[order[b]],toCountry:countries[+o[p].c],points:p})})});
+      let ballot=0;while(ballot<order.length&&ks(vb[ballot]).length>=10)ballot++;
+      game={countries,order,playerIds:arr(g.playerIds),seed:g.seed,year:g.year||null,ballot,votes,final:v.final?arr(v.final):null,override:v.override||{}};
+    }
+    return{code,createdAt:v.createdAt,status:v.status,hostId:v.hostUid,players,invites,game};
+  }
+  function attach(code){
+    if(watch[code])return watch[code].first;
+    let res;const first=new Promise(r=>res=r);
+    const w=watch[code]={first,offs:[]};
+    w.offs.push(onValue(ref(db,'rooms/'+code),snap=>{cache[code]=conv(code,snap.val());res();notify()},()=>{cache[code]=null;delete watch[code];res();notify()}));
+    const pr=ref(db,`rooms/${code}/presence/${uid}`);
+    w.offs.push(onValue(ref(db,'.info/connected'),s=>{if(s.val()){onDisconnect(pr).set(false).catch(()=>{});set(pr,true).catch(()=>{})}}));
+    return tmo(first,8000,'net').catch(()=>{});
+  }
+  function detachOthers(code){Object.keys(watch).forEach(c=>{if(c!==code){(watch[c].offs||[]).forEach(f=>{try{f()}catch(e){}});delete watch[c];delete cache[c]}})}
+
+  return{
+    kind:'firebase',uid,MAXP,fmt,norm,connected:()=>connP,
+    subscribe(f){subs.add(f);return()=>subs.delete(f)},
+    subscribeRoom(code,cb){const f=()=>cb(clone(cache[code]||null));subs.add(f);f();return()=>subs.delete(f)},
+    peek(code){return cache[code]===undefined?undefined:clone(cache[code])},
+    async getRoom(code){if(!code)return null;await attach(code);return clone(cache[code]||null)},
+    async listRooms(){return[]},   /* rooms are private: nobody can list them */
+    async createRoom(hostName){
+      const name=String(hostName||'').trim().slice(0,20);if(!name)throw err('name');
+      await tmo(connP,6000,'net');online();
+      let code=null;
+      for(let a=0;!code;a++){const c=rnd(6);try{await set(ref(db,'rooms/'+c),{hostUid:uid,status:'lobby',createdAt:Date.now()});code=c}catch(e){if(a>=5)throw wrap(e)}}
+      for(let a=0;;a++){
+        const codes=[];while(codes.length<MAXP-1){const c=rnd(8);if(!codes.includes(c))codes.push(c)}
+        const up={};up[`rooms/${code}/players/${uid}`]={name,ready:true,isHost:true,joinedAt:Date.now()};
+        codes.forEach(c=>{up[`rooms/${code}/inviteCodes/${c}`]=true;up[`invites/${c}`]={room:code}});
+        try{await update(ref(db),up);break}catch(e){if(a>=2)throw wrap(e)}
+      }
+      detachOthers(code);await attach(code);
+      return{room:clone(cache[code]),playerId:uid};
+    },
+    async joinWithInvite(raw,name){
+      const c=norm(raw);if(!c)throw err('empty');if(c.length!==8)throw err('format');
+      let nm=String(name||'').trim().slice(0,20);if(!nm)throw err('name');
+      await tmo(connP,6000,'net');online();
+      let inv;try{inv=await tmo(get(ref(db,'invites/'+c)),8000,'net')}catch(e){throw wrap(e)}
+      if(!inv.exists())throw err('none');
+      const iv=inv.val();
+      if(iv.usedBy&&iv.usedBy!==uid)throw err('used');
+      const room=iv.room;
+      if(!iv.usedBy){try{await set(ref(db,`invites/${c}/usedBy`),uid)}catch(e){throw err('used')}}
+      try{await set(ref(db,`rooms/${room}/players/${uid}`),{name:nm,ready:false,isHost:false,joinedAt:Date.now(),inviteCode:c})}
+      catch(e){throw err('started')}
+      detachOthers(room);await attach(room);
+      const r=cache[room];
+      if(r&&r.players.some(p=>p.id!==uid&&p.name.toLowerCase()===nm.toLowerCase()&&p.joinedAt<=r.players.find(x=>x.id===uid).joinedAt)){
+        try{await set(ref(db,`rooms/${room}/players/${uid}/name`),nm.slice(0,18)+' 2')}catch(e){}
+      }
+      return{room:clone(cache[room]),playerId:uid};
+    },
+    async setReady(code,pid,ready){online();try{await set(ref(db,`rooms/${code}/players/${uid}/ready`),!!ready)}catch(e){throw wrap(e)}return clone(cache[code])},
+    async beginGame(code,g){
+      online();const N=g.countries.length,P=g.playerIds.length,seq={};
+      for(let b=0;b<N;b++)seq[b]={u:g.playerIds[b%P],p:b===0?'-':String(b-1),j:String(g.order[b])};
+      const game={countries:g.countries,order:g.order,playerIds:g.playerIds,n:N,seq,seed:g.seed>>>0};
+      if(g.year)game.year=g.year;
+      const up={};up[`rooms/${code}/game`]=game;up[`rooms/${code}/status`]='playing';
+      try{await update(ref(db),up)}catch(e){throw wrap(e)}
+      return clone(cache[code]);
+    },
+    /* one atomic write: the vote under its point value + the country marker. The rules accept it only
+       from the player whose turn it is, only after the previous ballot is complete, and only once per
+       point value and once per country. */
+    async appendVote(code,v){
+      online();const r=cache[code],c=r&&r.game?r.game.countries.indexOf(v.toCountry):-1;if(c<0)throw err('country');
+      const up={};up[`rooms/${code}/votes/${v.ballot}/${v.points}`]={c:String(c),u:v.playerId};up[`rooms/${code}/byCountry/${v.ballot}/${c}`]=String(v.points);
+      try{await update(ref(db),up)}catch(e){throw wrap(e)}
+      return clone(cache[code]);
+    },
+    async setBallot(code){return clone(cache[code])},   /* derived from the votes, nothing to store */
+    async claimTurn(code,b){online();try{await set(ref(db,`rooms/${code}/override/${b}`),uid)}catch(e){throw wrap(e)}},
+    async finishGame(code,final){
+      /* every device reaches the end on its own; the first one stores the result, the others skip (write-once) */
+      const r=cache[code];
+      if(!(r&&r.game&&r.game.final)){try{await set(ref(db,`rooms/${code}/final`),final)}catch(e){}}
+      if(!r||r.status!=='done'){try{await set(ref(db,`rooms/${code}/status`),'done')}catch(e){}}
+      return clone(cache[code]);
+    },
+    async reopenLobby(code){
+      online();const up={};['game','votes','byCountry','override','final'].forEach(k=>up[`rooms/${code}/${k}`]=null);up[`rooms/${code}/status`]='lobby';
+      try{await update(ref(db),up)}catch(e){throw wrap(e)}
+      return clone(cache[code]);
+    }
+  };
+}
+
+(async()=>{
+  try{
+    const [A,AU,D]=await tmo(Promise.all([import(FB_SDK+'firebase-app.js'),import(FB_SDK+'firebase-auth.js'),import(FB_SDK+'firebase-database.js')]),12000,'sdk');
+    const app=A.initializeApp(FB_CONFIG),auth=AU.getAuth(app);
+    const cred=await tmo(AU.signInAnonymously(auth),12000,'auth');
+    const db=D.getDatabase(app),be=makeFirebaseBackend({db,uid:cred.user.uid,D});
+    await tmo(be.connected(),12000,'connect');
+    useBackend(be);FRUI.setConn('on');
+  }catch(e){console.warn('[EuroVote] online mode unavailable, using same-browser mode:',e&&(e.code||e.message));FRUI.setConn('off',e&&(e.code||e.message))}
+})();
+</script>
 </body>
 </html>
-
-</body></html>
